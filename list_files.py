@@ -23,11 +23,11 @@ for filename in onlyfiles:
     only_filename, file_extension = os.path.splitext(filename)
     if file_extension == '.png':
         filename = join(folder_path,filename)
-        print("Image converted: ", filename)
         im = Image.open(filename)
         rgb_im = im.convert('RGB')
         converted_folder_path = join(folder_path,"converted")
         if not os.path.exists(converted_folder_path):
             os.makedirs(converted_folder_path)
         rgb_im.save(join(converted_folder_path, only_filename) + '.jpg')
+        print("Image converted: ", filename)
 print("All .PNG images have been converted, you can find them in: ",converted_folder_path)
