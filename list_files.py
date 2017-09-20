@@ -4,29 +4,30 @@ from os import listdir
 from os.path import isfile, join
 import argparse
 
-parser = argparse.ArgumentParser(description='Process PNG imgages in folder.')
+parser = argparse.ArgumentParser(description='Convert all PNG images to JPG in specified folder.')
 parser.add_argument('folder', type=str,
-                   help='Path to folder in witch PNG images are located.')
+                   help='Path to folder where PNG images are located.')
 
 args = parser.parse_args()
 
-FOLDER_PATH = sys.argv[1]
+folder_path = sys.argv[1]
 
-if not os.path.exists(FOLDER_PATH):
-    print("Directory named ", FOLDER_PATH, " does not exist, please enter a valid directory name.")
+if not os.path.exists(folder_path):
+    print("Directory named ", folder_path, " does not exist, please enter a valid directory name.")
     sys.exit()
 
-onlyfiles = [f for f in listdir(FOLDER_PATH) if isfile(join(FOLDER_PATH, f))]
+onlyfiles = [f for f in listdir(folder_path) if isfile(join(folder_path, f))]
 
 
 for filename in onlyfiles:
     only_filename, file_extension = os.path.splitext(filename)
     if file_extension == '.png':
-        filename = FOLDER_PATH + filename
+        filename = join(folder_path,filename)
         print("Image converted: ", filename)
         im = Image.open(filename)
         rgb_im = im.convert('RGB')
-        if not os.path.exists(FOLDER_PATH+"converted"):
-            os.makedirs(FOLDER_PATH+"converted")
-        rgb_im.save(FOLDER_PATH + "converted/" + only_filename + '.jpg')
-print("All .PNG images have been converted, you can find them in: ",join(FOLDER_PATH, "converted/"))
+        converted_folder_path = join(folder_path,"converted")
+        if not os.path.exists(converted_folder_path):
+            os.makedirs(converted_folder_path)
+        rgb_im.save(join(converted_folder_path, only_filename) + '.jpg')
+print("All .PNG images have been converted, you can find them in: ",converted_folder_path)
