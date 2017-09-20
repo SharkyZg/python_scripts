@@ -1,5 +1,5 @@
 # Simple python script that converts all PNG files to JPG in one specific folder.
-# Script created by Marko Sarkanj
+# Script written by Marko Sarkanj.
 
 from PIL import Image
 import os, sys
