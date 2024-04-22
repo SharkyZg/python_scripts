@@ -61,12 +61,16 @@ def game_over():
     retry_text = font.render("Press any key to play again", True, (255, 255, 255))
     high_score_text = font.render(f"High Score: {high_score}", True, (255, 255, 255))  
 
-
     screen.fill(BLACK)
+
     screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2 - score_text.get_height() // 2 - 2 * score_text.get_height()))
     screen.blit(high_score_text, (WIDTH // 2 - high_score_text.get_width() // 2, HEIGHT // 2 - score_text.get_height()))
     screen.blit(retry_text, (WIDTH // 2 - retry_text.get_width() // 2, HEIGHT // 2 + score_text.get_height() ))
+    
     pygame.display.flip()
+
+    time.sleep(1)
+    pygame.event.clear()
 
     while True:
         for event in pygame.event.get():
