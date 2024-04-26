@@ -12,12 +12,16 @@ SCREEN_HEIGHT = 480
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Define shape (PYRAMID or CUBE)
-SHAPE = CUBE
+SHAPE = PYRAMID
 
 # Delay in ms
 DELAY = 10
 
-# Set up the rotation angles
+# Rotation
+X_ROTATION = 0.01
+Y_ROTATION = 0.01
+
+# Set up the starting rotation angles
 rotation_x = math.pi / 2
 rotation_y = math.pi / 4
 
@@ -57,8 +61,8 @@ while running:
     screen.fill((0, 0, 0))
 
     # Rotate the geometry vertices
-    rotation_x += 0.01
-    rotation_y += 0.01
+    rotation_x += X_ROTATION
+    rotation_y += Y_ROTATION
     if rotation_x > 2 * math.pi:
         rotation_x = 0
     if rotation_y > 2 * math.pi:
@@ -66,8 +70,9 @@ while running:
 
     rotated_vertices = rotate_vertices(SHAPE[0], rotation_x, rotation_y)
 
-    for_drawing = []
-    # collect the polygons to draw with depth for painter's algorithm order
+    # Create a list to store the polygons to draw with their average Z-coordinate
+    polygons_to_draw = []
+    
     for face in SHAPE[1]:
         v1, v2, v3, color = face
 
@@ -75,20 +80,21 @@ while running:
         rotated_v2 = rotate_vertices([v2], rotation_x, rotation_y)[0]
         rotated_v3 = rotate_vertices([v3], rotation_x, rotation_y)[0]
 
-        min_z = min(rotated_v1['z_projected'], rotated_v2['z_projected'], rotated_v3['z_projected'])
-        max_z = max(rotated_v1['z_projected'], rotated_v2['z_projected'], rotated_v3['z_projected'])
+        # Calculate the average Z-coordinate of the polygon
+        avg_z = (rotated_v1['z_projected'] + rotated_v2['z_projected'] + rotated_v3['z_projected']) / 3
 
         projected_v1 = rotated_v1['2D vertices']
         projected_v2 = rotated_v2['2D vertices']
         projected_v3 = rotated_v3['2D vertices']
 
-        for_drawing.append([min_z, max_z, [projected_v1, projected_v2, projected_v3], color])
-    
-    # sort the polygons to draw by depth
-    for_drawing = sorted(for_drawing, key=lambda x: (x[0] + x[1]) / 2, reverse=True)
-        
-    for polygon_to_draw in for_drawing:
-        pygame.draw.polygon(screen, polygon_to_draw[3], polygon_to_draw[2])
+        polygons_to_draw.append([avg_z, [projected_v1, projected_v2, projected_v3], color])
+
+    # Sort the polygons by their average Z-coordinate (depth)
+    polygons_to_draw.sort(reverse=True)
+
+    # Draw the polygons in the correct order
+    for polygon in polygons_to_draw:
+        pygame.draw.polygon(screen, polygon[2], polygon[1])
 
     # Update the screen
     pygame.display.flip()
