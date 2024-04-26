@@ -25,8 +25,8 @@ Y_ROTATION = 0.01
 rotation_x = math.pi / 2
 rotation_y = math.pi / 4
 
-def rotate_vertices(vertices, rotation_x, rotation_y):
-    rotated_vertices = []
+def project_vertices(vertices, rotation_x, rotation_y):
+    projected_vertices = []
     for vertex in vertices:
         x, y, z = vertex
 
@@ -44,9 +44,9 @@ def rotate_vertices(vertices, rotation_x, rotation_y):
         projected_x = int(x_projected * 100 + SCREEN_WIDTH / 2)
         projected_y = int(y_projected * 100 + SCREEN_HEIGHT / 2)
 
-        rotated_vertices.append({'2D vertices': (projected_x, projected_y), 'z_projected': z_projected})
+        projected_vertices.append({'2D vertices': (projected_x, projected_y), 'z_projected': z_projected})
 
-    return rotated_vertices
+    return projected_vertices
 
 
 # Main loop
@@ -68,7 +68,7 @@ while running:
     if rotation_y > 2 * math.pi:
         rotation_y = 0
 
-    rotated_vertices = rotate_vertices(SHAPE[0], rotation_x, rotation_y)
+    projected_vertices = project_vertices(SHAPE[0], rotation_x, rotation_y)
 
     # Create a list to store the polygons to draw with their average Z-coordinate
     polygons_to_draw = []
@@ -76,9 +76,9 @@ while running:
     for face in SHAPE[1]:
         v1, v2, v3, color = face
 
-        rotated_v1 = rotate_vertices([v1], rotation_x, rotation_y)[0]
-        rotated_v2 = rotate_vertices([v2], rotation_x, rotation_y)[0]
-        rotated_v3 = rotate_vertices([v3], rotation_x, rotation_y)[0]
+        rotated_v1 = project_vertices([v1], rotation_x, rotation_y)[0]
+        rotated_v2 = project_vertices([v2], rotation_x, rotation_y)[0]
+        rotated_v3 = project_vertices([v3], rotation_x, rotation_y)[0]
 
         # Calculate the average Z-coordinate of the polygon
         avg_z = (rotated_v1['z_projected'] + rotated_v2['z_projected'] + rotated_v3['z_projected']) / 3
