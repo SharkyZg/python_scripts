@@ -12,7 +12,7 @@ SCREEN_HEIGHT = 480
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Define shape (PYRAMID or CUBE)
-SHAPE = PYRAMID
+SHAPE = CUBE
 
 # Delay in ms
 DELAY = 10
@@ -40,9 +40,10 @@ def project_vertices(vertices, rotation_x, rotation_y):
         y_projected = y_rotated
         z_projected = -x_rotated * math.sin(rotation_y) + z_rotated * math.cos(rotation_y)
 
-        # Project onto 2D plane (ignore Z coordinate)
-        projected_x = int(x_projected * 100 + SCREEN_WIDTH / 2)
-        projected_y = int(y_projected * 100 + SCREEN_HEIGHT / 2)
+       # Perspective projection (divide by z-coordinate to get 2D coordinates)
+        factor = 4 / (z_projected + 5)  # adjust this value for better perspective effect
+        projected_x = int(x_projected * factor * 100 + SCREEN_WIDTH / 2)
+        projected_y = int(y_projected * factor * 100 + SCREEN_HEIGHT / 2)
 
         projected_vertices.append({'2D vertices': (projected_x, projected_y), 'z_projected': z_projected})
 
