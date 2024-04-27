@@ -19,9 +19,6 @@ def Cube():
     glEnd()
 
 def Pyramid():
-
-    
-
     for face in geometry_shapes_adv.PYRAMID[1]:
         
         if len(face) == 5: 
@@ -61,7 +58,7 @@ def main():
 
         glRotatef(1, 3, 3, 1)
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        Pyramid()
+        Cube()
         pygame.display.flip()
         pygame.time.wait(10)
 
