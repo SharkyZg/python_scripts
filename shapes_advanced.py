@@ -18,8 +18,6 @@ DELAY = 10
 X_ROTATION = 0.01
 Y_ROTATION = 0.01
 
-
-
 def render_polygon(screen, polygons, z_buffer):
     for polygon in polygons:
         color = polygon['color']
@@ -40,37 +38,53 @@ def calculate_sides_and_extract_color(rotation_x, rotation_y):
         v1, v2, v3, color = face
 
         # Rotate the vertices
-        rotated_v1 = rotate_vertices([v1], rotation_x, rotation_y)
-        rotated_v2 = rotate_vertices([v2], rotation_x, rotation_y)
-        rotated_v3 = rotate_vertices([v3], rotation_x, rotation_y)
+        rotated_v1, rotated_v2, rotated_v3 = rotate_polygon(v1, v2, v3, rotation_x, rotation_y)
 
         # Project the vertices
-        projected_v1 = project_vertices(rotated_v1)
-        projected_v2 = project_vertices(rotated_v2)
-        projected_v3 = project_vertices(rotated_v3)
+        projected_v1, projected_v2, projected_v3 = project_polygon(rotated_v1, rotated_v2, rotated_v3)
 
         polygons.append({'sides': [projected_v1, projected_v2, projected_v3], 'color': color})
 
     return polygons
+
+def rotate_polygon(v1, v2, v3, rotation_x, rotation_y):
+    # Rotate the vertices
+    rotated_v1 = rotate_vertices([v1], rotation_x, rotation_y)
+    rotated_v2 = rotate_vertices([v2], rotation_x, rotation_y)
+    rotated_v3 = rotate_vertices([v3], rotation_x, rotation_y)
+    return rotated_v1, rotated_v2, rotated_v3
 
 def rotate_vertices(vertices, rotation_x, rotation_y):
     rotated_vertices = []
     for vertex in vertices:
         x, y, z = vertex
 
-        # Rotate around X axis
-        x_rotated = x
-        y_rotated = y * math.cos(rotation_x) - z * math.sin(rotation_x)
-        z_rotated = y * math.sin(rotation_x) + z * math.cos(rotation_x)
-
-        # Rotate around Y axis
-        x_rotated = x_rotated * math.cos(rotation_y) + z_rotated * math.sin(rotation_y)
-        y_rotated = y_rotated
-        z_rotated = -x_rotated * math.sin(rotation_y) + z_rotated * math.cos(rotation_y)
+        # Rotate around X and Y axis
+        x_rotated, y_rotated, z_rotated = rotate_around_x_axis(x, y, z, rotation_x)
+        x_rotated, y_rotated, z_rotated = rotate_around_y_axis(x_rotated, y_rotated, z_rotated, rotation_y)
 
         rotated_vertices.append([x_rotated, y_rotated, z_rotated])
 
     return rotated_vertices
+
+def rotate_around_x_axis(x, y, z, rotation_x):
+    x_rotated = x
+    y_rotated = y * math.cos(rotation_x) - z * math.sin(rotation_x)
+    z_rotated = y * math.sin(rotation_x) + z * math.cos(rotation_x)
+    return x_rotated, y_rotated, z_rotated
+
+def rotate_around_y_axis(x_rotated, y_rotated, z_rotated, rotation_y):
+    x_rotated = x_rotated * math.cos(rotation_y) + z_rotated * math.sin(rotation_y)
+    y_rotated = y_rotated
+    z_rotated = -x_rotated * math.sin(rotation_y) + z_rotated * math.cos(rotation_y)
+    return x_rotated, y_rotated, z_rotated
+
+def project_polygon(rotated_v1, rotated_v2, rotated_v3):
+    # Rotate the vertices
+    projected_v1 = project_vertices(rotated_v1)
+    projected_v2 = project_vertices(rotated_v2)
+    projected_v3 = project_vertices(rotated_v3)
+    return projected_v1, projected_v2, projected_v3
 
 def project_vertices(vertices):
         projected_vertices = []
