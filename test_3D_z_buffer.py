@@ -27,3 +27,4 @@ def test_rotate_vertices():
     for vertex in rotated_vertices:
         assert isinstance(vertex, list)
         assert len(vertex) == 3
+        
