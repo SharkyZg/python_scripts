@@ -20,43 +20,28 @@ def Cube():
 
 def Pyramid():
 
-    glBegin(GL_QUADS)
-    # Base
-    glColor3f(1, 0, 0)  # Red
-    glVertex3f(-1, -1, 0)
-    glVertex3f(1, -1, 0)
-    glVertex3f(1, 1, 0)
-    glVertex3f(-1, 1, 0)
-
-    glEnd()
-
-    glBegin(GL_TRIANGLES)
-    # Front face
-    glColor3f(0, 1, 0)  # Green
-    glVertex3f(-1, -1, 0)
-    glVertex3f(1, -1, 0)
-    glVertex3f(0, 0, 1)
-
-    # Right face
-    glColor3f(0, 0, 1)  # Blue
-    glVertex3f(1, -1, 0)
-    glVertex3f(1, 1, 0)
-    glVertex3f(0, 0, 1)
-
-    # Back face
-    glColor3f(1, 1, 0)  # Yellow
-    glVertex3f(1, 1, 0)
-    glVertex3f(-1, 1, 0)
-    glVertex3f(0, 0, 1)
-
-    # Left face
-    glColor3f(1, 0, 1)  # Magenta
-    glVertex3f(-1, 1, 0)
-    glVertex3f(-1, -1, 0)
-    glVertex3f(0, 0, 1)
     
-    glEnd()
 
+    for face in geometry_shapes_adv.PYRAMID[1]:
+        
+        if len(face) == 5: 
+            glBegin(GL_QUADS)
+            glColor3fv(face[4]) 
+            glVertex3fv(face[0]) 
+            glVertex3fv(face[1]) 
+            glVertex3fv(face[2]) 
+            glVertex3fv(face[3]) 
+            glEnd()
+
+        else: 
+            glBegin(GL_TRIANGLES)
+            glColor3fv(face[3]) 
+            glVertex3fv(face[0]) 
+            glVertex3fv(face[1]) 
+            glVertex3fv(face[2])
+            glEnd() 
+    
+    
 def main():
     pygame.init()
     display = (800,600)
