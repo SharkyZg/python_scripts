@@ -5,11 +5,11 @@ import geometry_shapes
 import shapes_advanced
 from z_buffer import *
 
+vertices = geometry_shapes.CUBE_FACES[0][:3]
 
 def test_project_vertices():
-    vertices = [[1, 2, 3], [4, 5, 6]]
     projected_vertices = shapes_advanced.project_vertices(vertices)
-    assert len(projected_vertices) == 2
+    assert len(projected_vertices) == 3
     for vertex in projected_vertices:
         assert isinstance(vertex, list)
         assert len(vertex) == 3
@@ -20,18 +20,15 @@ def test_z_buffer_setup():
     assert z_buffer.height == 480
 
 def test_rotate_vertices():
-    vertices = geometry_shapes.CUBE_VERTICES[0]
     rotation_x = math.pi / 2
     rotation_y = math.pi / 4
     rotated_vertices = shapes_advanced.rotate_vertices(vertices, rotation_x, rotation_y)
-    assert len(rotated_vertices) == 2
+    assert len(rotated_vertices) == 3
     for vertex in rotated_vertices:
         assert isinstance(vertex, list)
         assert len(vertex) == 3
 
     rotated_vertices = np.array(rotated_vertices)
-
-    print(rotated_vertices)
     
     rotation_x_matrix = np.array([[1, 0, 0], 
                                 [0, math.cos(rotation_x), -math.sin(rotation_x)], 
@@ -41,10 +38,7 @@ def test_rotate_vertices():
     rotation_y_matrix = np.array([[math.cos(rotation_y), 0, math.sin(rotation_y)], 
                                 [0, 1, 0], 
                                 [-math.sin(rotation_y), 0, math.cos(rotation_y)]])
-
     x_and_y_rotated = np.dot(x_rotated, rotation_y_matrix)
-
-    print(x_and_y_rotated)
 
     assert np.array_equal(rotated_vertices, x_and_y_rotated)
 

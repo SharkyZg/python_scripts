@@ -2,7 +2,6 @@ import pygame
 import math
 import numpy as np
 from geometry_shapes import *
-from z_buffer import *
 
 # Set up the screen dimensions
 SCREEN_WIDTH = 640
@@ -19,18 +18,22 @@ X_ROTATION = 0.01
 Y_ROTATION = 0.01
 
 def render_polygon(screen, polygons, z_buffer):
+    pixel_array = pygame.PixelArray(screen)
     for polygon in polygons:
         color = polygon['color']
         sides = polygon['sides']
         vertices_2d = sides[:][:2]
         min_x, max_x, min_y, max_y = bounding_box(vertices_2d)
-        print(f"min_x: {min_x}, max_x: {max_x}, min_y: {min_y}, max_y: {max_y}")
+        # print(f"min_x: {min_x}, max_x: {max_x}, min_y: {min_y}, max_y: {max_y}")
         z_avg = np.array(sides[:][2]).mean()
+        
+
         for y in range(int(min_y), int(max_y) + 1):
             for x in range(int(min_x), int(max_x) + 1):
                 if z_buffer.test_and_set(x, y, z_avg):
-                    screen.set_at((x, y), color)
-                    print(f"x: {x}, y: {y}, z_avg: {z_avg}, color: {color}")
+                    pixel_array[x, y] = color
+                    # print(f"x: {x}, y: {y}, z_avg: {z_avg}, color: {color}")
+    pixel_array.close()
 
 def calculate_sides_and_extract_color(rotation_x, rotation_y):
     polygons = []
@@ -57,27 +60,28 @@ def rotate_polygon(v1, v2, v3, rotation_x, rotation_y):
 def rotate_vertices(vertices, rotation_x, rotation_y):
     rotated_vertices = []
     for vertex in vertices:
-        x, y, z = vertex
 
         # Rotate around X and Y axis
-        x_rotated, y_rotated, z_rotated = rotate_around_x_axis(x, y, z, rotation_x)
-        x_rotated, y_rotated, z_rotated = rotate_around_y_axis(x_rotated, y_rotated, z_rotated, rotation_y)
+        veretex_x_rotated = rotate_around_x_axis(vertex, rotation_x)
+        vertex_x_y_rotated = rotate_around_y_axis(veretex_x_rotated, rotation_y)
 
-        rotated_vertices.append([x_rotated, y_rotated, z_rotated])
+        rotated_vertices.append(vertex_x_y_rotated.tolist())
 
     return rotated_vertices
 
-def rotate_around_x_axis(x, y, z, rotation_x):
-    x_rotated = x
-    y_rotated = y * math.cos(rotation_x) - z * math.sin(rotation_x)
-    z_rotated = y * math.sin(rotation_x) + z * math.cos(rotation_x)
-    return x_rotated, y_rotated, z_rotated
+def rotate_around_x_axis(vertex, rotation_x):
+    rotation_x_matrix = np.array([[1, 0, 0], 
+                                [0, math.cos(rotation_x), -math.sin(rotation_x)], 
+                                [0, math.sin(rotation_x), math.cos(rotation_x)]])
+    x_rotated = np.dot(vertex, rotation_x_matrix)
+    return x_rotated
 
-def rotate_around_y_axis(x_rotated, y_rotated, z_rotated, rotation_y):
-    x_rotated = x_rotated * math.cos(rotation_y) + z_rotated * math.sin(rotation_y)
-    y_rotated = y_rotated
-    z_rotated = -x_rotated * math.sin(rotation_y) + z_rotated * math.cos(rotation_y)
-    return x_rotated, y_rotated, z_rotated
+def rotate_around_y_axis(veretex_x_rotated, rotation_y):
+    rotation_y_matrix = np.array([[math.cos(rotation_y), 0, math.sin(rotation_y)], 
+                                [0, 1, 0], 
+                                [-math.sin(rotation_y), 0, math.cos(rotation_y)]])
+    x_and_y_rotated = np.dot(veretex_x_rotated, rotation_y_matrix)
+    return x_and_y_rotated
 
 def project_polygon(rotated_v1, rotated_v2, rotated_v3):
     # Rotate the vertices
@@ -112,6 +116,24 @@ def bounding_box(vertices):
     min_y = vertices[1].min()
     max_y = vertices[1].max()
     return min_x, max_x, min_y, max_y
+
+class ZBuffer:
+    def __init__(self, width: int, height: int):
+        self.width = width
+        self.height = height
+        self.buffer = np.full((height, width), -float('inf'), dtype=np.float32)
+
+    def clear(self):
+        self.buffer.fill(-float('inf'))
+
+    def test_and_set(self, x: int, y: int, z: float) -> bool:
+        if z > self.buffer[x, y]:
+            self.buffer[x, y] = z
+            return True
+        return False
+
+    def get_z_value(self, x: int, y: int) -> float:
+        return self.buffer[y, x]
 
 # Main loop
 def main():
