@@ -2,7 +2,6 @@ import pygame
 import math
 import numpy as np
 from geometry_shapes import *
-import z_buffer
 
 # Initialize Pygame
 pygame.init()
@@ -13,13 +12,13 @@ SCREEN_HEIGHT = 480
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Define shape (PYRAMID or CUBE)
-SHAPE = CUBE
+SHAPE = PYRAMID
 
 # Delay in ms
 DELAY = 10
 
 # Rotation
-X_ROTATION = 0.01
+X_ROTATION = 0.00
 Y_ROTATION = 0.01
 
 # Set up the starting rotation angles
@@ -42,7 +41,7 @@ def project_vertices(vertices, rotation_x, rotation_y):
         z_projected = -x_rotated * math.sin(rotation_y) + z_rotated * math.cos(rotation_y)
 
        # Perspective projection (divide by z-coordinate to get 2D coordinates)
-        factor = 4 / (z_projected + 5)  # adjust this value for better perspective effect
+        factor = 4  / (z_projected + 5)  # adjust this value for better perspective effect
         projected_x = int(x_projected * factor * 100 + SCREEN_WIDTH / 2)
         projected_y = int(y_projected * factor * 100 + SCREEN_HEIGHT / 2)
 
