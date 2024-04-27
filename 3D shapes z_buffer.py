@@ -2,6 +2,7 @@ import pygame
 import math
 import numpy as np
 from geometry_shapes import *
+from z_buffer import *
 
 # Initialize Pygame
 pygame.init()
@@ -44,6 +45,7 @@ def rotate_vertices(vertices, rotation_x, rotation_y):
 
     return rotated_vertices
 
+z_buffer = ZBuffer(screen_width, screen_height)
 
 # Main loop
 running = True
@@ -63,15 +65,21 @@ while running:
         rotation_x = 0
     if rotation_y > 2 * math.pi:
         rotation_y = 0
-
+    
+    polygons = np.empty()
     for face in SHAPE[1]:
         v1, v2, v3, color = face
 
         rotated_v1 = rotate_vertices([v1], rotation_x, rotation_y)
         rotated_v2 = rotate_vertices([v2], rotation_x, rotation_y)
         rotated_v3 = rotate_vertices([v3], rotation_x, rotation_y)
+        polygons.append([rotated_v1, rotated_v2, rotated_v3])
 
     # Draw with the z_buffer algorithm
+    screen.fill((0, 0, 0))
+    z_buffer.clear()
+
+    render_polygon(polygons, z_buffer, color)
     
     # Update the screen
     pygame.display.flip()

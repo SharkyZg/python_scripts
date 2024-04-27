@@ -2,6 +2,7 @@ import pygame
 import math
 import numpy as np
 from geometry_shapes import *
+import z_buffer
 
 # Initialize Pygame
 pygame.init()
