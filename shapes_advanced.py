@@ -145,4 +145,4 @@ def main():
     # Quit Pygame
     pygame.quit()
 
-main()
+if __name__ == "__main__": main()
