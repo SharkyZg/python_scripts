@@ -88,7 +88,7 @@ while running:
         projected_v2 = rotated_v2['2D vertices']
         projected_v3 = rotated_v3['2D vertices']
 
-        polygons_to_draw.append([avg_z, [projected_v1, projected_v2, projected_v3], color])
+        polygons_to_draw.append([avg_z, [projected_v1, projected_v2, projected_v3q], color])
 
     # Sort the polygons by their average Z-coordinate (depth)
     polygons_to_draw.sort(reverse=True)
