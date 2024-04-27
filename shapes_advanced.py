@@ -4,30 +4,6 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 import geometry_shapes_adv
 
-verticies = (
-    [-1, -1, -1],
-    [1, -1, -1],
-    [1, 1, -1],
-    [-1, 1, -1],
-    [-1, -1, 1],
-    [1, -1, 1],
-    [1, 1, 1],
-    [-1, 1, 1]
-)
-
-colors = (
-    (1, 0, 0),  # Red
-    (0, 1, 0),  # Green
-    (0, 0, 1),  # Blue
-    (1, 1, 0),  # Yellow
-    (1, 0, 1),  # Magenta
-    (0, 1, 1),  # Cyan
-    (1, 1, 1),  # White
-    (0, 0, 0)   # Black
-)
-
-SHAPE = geometry_shapes_adv.CUBE
-
 def Cube():
 
     glBegin(GL_QUADS)
@@ -45,13 +21,39 @@ def Cube():
 def Pyramid():
 
     glBegin(GL_QUADS)
+    # Base
+    glColor3f(1, 0, 0)  # Red
+    glVertex3f(-1, -1, 0)
+    glVertex3f(1, -1, 0)
+    glVertex3f(1, 1, 0)
+    glVertex3f(-1, 1, 0)
 
-    for face in geometry_shapes_adv.PYRAMID[1]:
+    glEnd()
 
-            glColor3fv(face[3]) 
-            glVertex3fv(face[0]) 
-            glVertex3fv(face[1]) 
-            glVertex3fv(face[2]) 
+    glBegin(GL_TRIANGLES)
+    # Front face
+    glColor3f(0, 1, 0)  # Green
+    glVertex3f(-1, -1, 0)
+    glVertex3f(1, -1, 0)
+    glVertex3f(0, 0, 1)
+
+    # Right face
+    glColor3f(0, 0, 1)  # Blue
+    glVertex3f(1, -1, 0)
+    glVertex3f(1, 1, 0)
+    glVertex3f(0, 0, 1)
+
+    # Back face
+    glColor3f(1, 1, 0)  # Yellow
+    glVertex3f(1, 1, 0)
+    glVertex3f(-1, 1, 0)
+    glVertex3f(0, 0, 1)
+
+    # Left face
+    glColor3f(1, 0, 1)  # Magenta
+    glVertex3f(-1, 1, 0)
+    glVertex3f(-1, -1, 0)
+    glVertex3f(0, 0, 1)
     
     glEnd()
 
