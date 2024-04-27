@@ -8,7 +8,7 @@
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "3D shapes z_buffer.py",
+            "program": "shapes_advanced.py",
             "console": "integratedTerminal"
         }
     ]
