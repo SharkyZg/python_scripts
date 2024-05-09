@@ -69,21 +69,28 @@ def main():
 
     t = 0
     shape_chage_rate = 0.003
+    rotation_speed_x = 3
+    rotation_speed_y = 6
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
-        glRotatef(1, 3, 6, 1)
+        glRotatef(1, rotation_speed_x, rotation_speed_y, 1)
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         Cube(t)
 
         t += shape_chage_rate
         if t > 2:
             shape_chage_rate *= -1
+            rotation_speed_x *= -1
+            rotation_speed_y *= -1 
         elif t < -1:
             shape_chage_rate *= -1
+            rotation_speed_x *= -1
+            rotation_speed_y *= -1
 
         pygame.display.flip() 
         pygame.time.wait(10)
