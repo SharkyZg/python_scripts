@@ -16,8 +16,6 @@ def Cube(t):
          [-(1 - 0.5 * t),  (1 - 0.5 * t), -(1 - 0.5 * t)]  
      ]
 
-
-
     glBegin(GL_QUADS)
 
     glColor3fv((1, 0, 0))
