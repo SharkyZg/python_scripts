@@ -42,6 +42,7 @@ def main():
 
     t = 0
     shape_change_rate = 0.003
+    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -57,7 +58,7 @@ def main():
         t += shape_change_rate
         if t > 2:
             shape_change_rate *= -1
-        elif t < -1:
+        elif t <= 0:
             shape_change_rate *= -1
 
         pygame.display.flip()
