@@ -20,6 +20,7 @@ score = 0
 # Set up some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 
 # Set up the display
@@ -132,7 +133,7 @@ while True:
     screen.fill(BLACK)
     
     for x, y in snake:
-        pygame.draw.rect(screen, WHITE, (x, y, BLOCK_SIZE, BLOCK_SIZE))
+        pygame.draw.rect(screen, GREEN, (x, y, BLOCK_SIZE, BLOCK_SIZE))
         
     pygame.draw.rect(screen, RED, (food[0], food[1], BLOCK_SIZE, BLOCK_SIZE))
 
