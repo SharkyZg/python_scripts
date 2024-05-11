@@ -25,7 +25,7 @@ def main():
     shape_change_rate = 0.003
     rotation_speed_x = 3
     rotation_speed_y = 6
-    shapes = ['cube', 'pyramid', 'octahedron', 'sphere']  # Including the sphere
+    shapes = ['cube', 'pyramid', 'octahedron', 'sphere', 'icosahedron']  # Including the sphere
     current_shape = 0  # Start with the cube
 
     while True:
@@ -49,6 +49,8 @@ def main():
             draw_shape(OCTAHEDRON_VERTICES, OCTAHEDRON_FACES, scale)
         elif shapes[current_shape] == 'sphere':
             draw_shape(SPHERE_VERTICES, SPHERE_FACES, scale)
+        elif shapes[current_shape] == 'icosahedron':
+            draw_shape(ICOSAHEDRON_VERTICES, ICOSAHEDRON_FACES, scale)
 
         t += shape_change_rate
         if t > 2 or t < -1:
