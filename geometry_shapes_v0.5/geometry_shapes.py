@@ -115,3 +115,19 @@ ICOSAHEDRON_FACES = [
     [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
     [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]
 ]
+
+# Tetrahedron vertices
+TETRAHEDRON_VERTICES = [
+    [1, 1, 1],
+    [-1, -1, 1],
+    [-1, 1, -1],
+    [1, -1, -1]
+]
+
+# Tetrahedron faces
+TETRAHEDRON_FACES = [
+    [0, 1, 2],
+    [0, 3, 1],
+    [0, 2, 3],
+    [1, 3, 2]
+]
