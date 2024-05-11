@@ -4,26 +4,29 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 import math
 
-def CubeToSphere(t):
+def Sphere(t):
     vertices = []
-    num_slices = 16
-    num_stacks = 8
+    num_slices = 16 * 2
+    num_stacks = 8 * 2
 
     # Generate vertices for the object
     for i in range(num_stacks + 1):
         z = (2 * i / num_stacks - 1)
         r = math.sqrt(1 - z ** 2)
-        for j in range(num_slices + 1):  # Include an extra point to wrap around
+        for j in range(num_slices + 1):
             theta = 2 * math.pi * j / num_slices
             x = r * math.cos(theta) * (1 - t) + (t * math.cos(theta))
             y = r * math.sin(theta) * (1 - t) + (t * math.sin(theta))
             vertices.append([x, y, z])
 
-    # Begin drawing quad strips and add color
+    # Begin drawing quad strips and add color with a mirrored gradient effect
     glBegin(GL_QUAD_STRIP)
     for i in range(num_stacks):
         for j in range(num_slices + 1):  # Complete the loop by including the first vertex
-            glColor3f(i/num_stacks, j/num_slices, (i+j)/(num_stacks+num_slices))
+            # Calculate a mirrored gradient by using the absolute difference from the middle
+            half_slices = num_slices / 2
+            color_value = abs((j - half_slices) / half_slices)  # Normalizes the value and mirrors it at the midpoint
+            glColor3f(i / num_stacks, color_value, color_value*2)
             glVertex3fv(vertices[i * (num_slices + 1) + j])
             glVertex3fv(vertices[(i + 1) * (num_slices + 1) + j])
     glEnd()
@@ -48,7 +51,7 @@ def main():
         # Rotate the object slightly on each frame
         glRotatef(1, 3, 6, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        CubeToSphere(t)
+        Sphere(t)
 
         # Change transformation over time
         t += shape_change_rate
