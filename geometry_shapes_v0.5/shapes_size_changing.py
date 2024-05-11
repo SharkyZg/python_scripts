@@ -25,7 +25,8 @@ def main():
     shape_change_rate = 0.003
     rotation_speed_x = 3
     rotation_speed_y = 6
-    draw_shape_mode = 'cube'  # Can be 'cube' or 'pyramid'
+    shapes = ['cube', 'pyramid', 'octahedron', 'sphere']  # Including the sphere
+    current_shape = 0  # Start with the cube
 
     while True:
         for event in pygame.event.get():
@@ -34,16 +35,20 @@ def main():
                 quit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    draw_shape_mode = 'pyramid' if draw_shape_mode == 'cube' else 'cube'
+                    current_shape = (current_shape + 1) % len(shapes)
 
         glRotatef(1, rotation_speed_x, rotation_speed_y, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         scale = 1 - 0.5 * t
 
-        if draw_shape_mode == 'cube':
+        if shapes[current_shape] == 'cube':
             draw_shape(CUBE_VERTICES, CUBE_FACES, scale)
-        else:
+        elif shapes[current_shape] == 'pyramid':
             draw_shape(PYRAMID_VERTICES, PYRAMID_FACES, scale)
+        elif shapes[current_shape] == 'octahedron':
+            draw_shape(OCTAHEDRON_VERTICES, OCTAHEDRON_FACES, scale)
+        elif shapes[current_shape] == 'sphere':
+            draw_shape(SPHERE_VERTICES, SPHERE_FACES, scale)
 
         t += shape_change_rate
         if t > 2 or t < -1:

@@ -1,3 +1,5 @@
+import numpy as np
+
 # Colors for the faces
 COLORS = [
     [1, 0, 0],   # Red
@@ -62,3 +64,29 @@ OCTAHEDRON_FACES = [
     [0, 2, 4], [0, 4, 3], [0, 3, 5], [0, 5, 2], # Upper four triangles
     [1, 4, 2], [1, 3, 4], [1, 5, 3], [1, 2, 5]  # Lower four triangles
 ]
+
+def create_sphere(radius, segments):
+    vertices = []
+    faces = []
+
+    # Create vertices
+    for i in range(segments + 1):
+        lat = np.pi * i / segments  # from 0 to pi
+        for j in range(segments + 1):
+            lon = 2 * np.pi * j / segments  # from 0 to 2pi
+            x = radius * np.sin(lat) * np.cos(lon)
+            y = radius * np.sin(lat) * np.sin(lon)
+            z = radius * np.cos(lat)
+            vertices.append([x, y, z])
+
+    # Create faces
+    for i in range(segments):
+        for j in range(segments):
+            a = i * (segments + 1) + j
+            b = a + segments + 1
+            faces.append([a, b, a + 1])
+            faces.append([b, b + 1, a + 1])
+
+    return vertices, faces
+
+SPHERE_VERTICES, SPHERE_FACES = create_sphere(1, 16)  # Radius 1, 16 segments for decent detail
